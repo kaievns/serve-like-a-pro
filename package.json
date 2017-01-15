@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha"
   },
+  "bin": {
+    "serve-like-a-pro": "src/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MadRabbit/serve-like-a-pro.git"

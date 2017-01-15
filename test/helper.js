@@ -6,7 +6,7 @@ const { setup } = require('../src');
 
 coMocha(mocha);
 
+const { app } = setup({ root: `${__dirname}/site` });
+
 exports.expect = expect;
-exports.app = doubleagent(setup({
-  root: `${__dirname}/site`
-}));
+exports.app = doubleagent(app);

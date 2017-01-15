@@ -1,15 +1,19 @@
 const App    = require('./app');
 const Config = require('./config');
 
-module.exports = options => {
-  const app = exports.setup(options);
+const boot = options => {
+  const { app, config } = boot.setup(options);
 
   app.listen(config.port, () => {
-    console.log(`listening on port: ${config.port}`);
+    console.log(`Listening on port: ${config.port}`);
   });
 };
 
-module.exports.setup = options => {
+boot.setup = options => {
   const config = new Config(options);
-  return new App(config);
+  const app = new App(config);
+
+  return { app, config };
 };
+
+module.exports = boot;

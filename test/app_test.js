@@ -47,4 +47,20 @@ describe('the app', () => {
     expect(response.headers['content-type']).to.eql('text/html; charset=UTF-8');
     expect(response.text).to.eql('some page\n');
   });
+
+  it('recognizes index pages too', function * () {
+    const response = yield app.get('/some/index-page');
+
+    expect(response.status).to.eql(200);
+    expect(response.headers['content-type']).to.eql('text/html; charset=UTF-8');
+    expect(response.text).to.eql('some index page\n');
+  });
+
+  it('recognizes index pages with ending slashes too', function * () {
+    const response = yield app.get('/some/index-page/');
+
+    expect(response.status).to.eql(200);
+    expect(response.headers['content-type']).to.eql('text/html; charset=UTF-8');
+    expect(response.text).to.eql('some index page\n');
+  });
 });

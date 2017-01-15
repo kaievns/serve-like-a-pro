@@ -7,6 +7,7 @@ module.exports = function(options) {
     root,
     favicon,
     fallback,
-    port: process.env.PORT || 8080
+    port: process.env.PORT || 8080,
+    gzip: true
   }, options);
 };

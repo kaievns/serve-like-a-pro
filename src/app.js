@@ -8,6 +8,8 @@ const statics     = require('serve-static');
 module.exports = function(config) {
   const app = connect();
 
+  config.gzip && app.use(assets_compression());
+
   app.use(statics(config.root));
   app.use(favicon(config.favicon));
 
@@ -25,6 +27,13 @@ module.exports = function(config) {
   })
 
   return app;
+}
+
+function assets_compression() {
+  return compression({
+    level:  9,
+    filter: req => /\.(css|js|xml|json|md|svg)$/.test(req.url)
+  });
 }
 
 // app.use(production_caching());
@@ -45,16 +54,6 @@ module.exports = function(config) {
 //
 //     next();
 //   };
-// }
-//
-// // compresses the assets
-// function assets_compression() {
-//   return compression({
-//     level:  9,
-//     filter: function(req, res) {
-//       return /\.(css|js|xml|json|md)$/.test(req.url);
-//     }
-//   });
 // }
 //
 // // serves cached html/atom/css/js files

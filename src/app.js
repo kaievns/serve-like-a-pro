@@ -7,22 +7,15 @@ const statics     = require('serve-static');
 module.exports = function(config) {
   const app = connect();
 
+  app.use(statics(config.root));
+  app.use(favicon(config.favicon));
+
   return app;
 }
 
-// var production  = process.env.PORT != null;
-// var one_year    = 60 * 60 * 24 * 365;
-// var app         = connect();
-//
 // app.use(production_caching());
 // app.use(assets_compression());
 // app.use(serve_cached_data());
-// app.use(favicon(__dirname + "/app/assets/favicon.ico"));
-// app.use(statics('./'));
-//
-// http.createServer(app).listen(process.env.PORT || 8080, function() {
-//   console.log("Listening localhost:"+ (process.env.PORT || 8080))
-// });
 //
 // /////////////////////////////////////////////////////////
 // // private, middleware and stuff

@@ -2,11 +2,11 @@ const { expect } = require('chai');
 const mocha = require('mocha');
 const coMocha = require('co-mocha');
 const doubleagent = require('doubleagent');
-const serve = require('../src');
+const { setup } = require('../src');
 
 coMocha(mocha);
 
-const app = serve();
-
-exports.app = doubleagent(app);
 exports.expect = expect;
+exports.app = doubleagent(setup({
+  root: `${__dirname}/site`
+}));

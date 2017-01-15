@@ -1,3 +1,4 @@
+const fs          = require("fs");
 const http        = require("http");
 const connect     = require("connect");
 const compression = require('compression');
@@ -9,6 +10,19 @@ module.exports = function(config) {
 
   app.use(statics(config.root));
   app.use(favicon(config.favicon));
+
+  app.use((req, res) => {
+    const isHtmlRequest = !/.+?\.[a-z]+$/.test(req.url);
+
+    if (isHtmlRequest) {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
+      res.write(fs.readFileSync(config.fallback));
+    } else {
+      res.writeHead(404);
+    }
+
+    res.end();
+  })
 
   return app;
 }

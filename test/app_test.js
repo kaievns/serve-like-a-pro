@@ -15,4 +15,20 @@ describe('the app', () => {
     expect(response.status).to.eql(200);
     expect(response.headers['content-type']).to.eql('image/x-icon');
   });
+
+  it('handles the 404 cases', function * () {
+    const response = yield app.get('/non/existing/page');
+
+    expect(response.status).to.eql(404);
+    expect(response.headers['content-type']).to.eql('text/html; charset=UTF-8');
+    expect(response.text).to.eql('not found\n');
+  });
+
+  it('sends empty 404 responses for non-html requests', function * () {
+    const response = yield app.get('/non/existing.js');
+
+    expect(response.status).to.eql(404);
+    expect(response.headers['content-type']).not.to.eql('text/javascript; charset=UTF-8');
+    expect(response.text).to.eql('');
+  });
 });

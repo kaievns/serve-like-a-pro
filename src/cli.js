@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const serve = require('./index');
 const args  = process.argv.slice(2);
 const root  = args[0];

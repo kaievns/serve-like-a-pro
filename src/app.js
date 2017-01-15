@@ -10,6 +10,8 @@ module.exports = function(config) {
 
   config.gzip && app.use(assets_compression());
 
+  app.use(extensionless_resolver(config));
+
   app.use(statics(config.root));
   app.use(favicon(config.favicon));
 
@@ -25,18 +27,45 @@ function assets_compression() {
   });
 }
 
+function extensionless_resolver(config) {
+  return (req, res, next) => {
+    const rawPath = req.url;
+    const path = rawPath[rawPath.length - 1] === '/' ? rawPath.substr(0, rawPath.length - 1) : rawPath;
+    const isHtmlRequest = !/.+?\.[a-z]+$/.test(path);
+
+    if (isHtmlRequest) {
+      const securePath = path.replace(/\.\./g, '').replace(/\/\//g, '');
+      const filename = `${config.root}${securePath}.html`;
+
+      fs.readFile(filename, (err, content) => {
+        if (err) {
+          next(); // terminating with 404
+        } else {
+          res.writeHead(200, {'Content-Type': 'text/html; charset=UTF-8'});
+          res.write(content);
+          res.end();
+        }
+      });
+    } else {
+      next();
+    }
+  };
+}
+
 function terminal_fallback(config) {
   return (req, res) => {
     const isHtmlRequest = !/.+?\.[a-z]+$/.test(req.url);
 
     if (isHtmlRequest) {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
-      res.write(fs.readFileSync(config.fallback));
+      fs.readFile(config.fallback, (err, content) => {
+        res.write(content);
+        res.end();
+      });
     } else {
       res.writeHead(404);
+      res.end();
     }
-
-    res.end();
   }
 }
 

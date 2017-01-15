@@ -31,4 +31,20 @@ describe('the app', () => {
     expect(response.headers['content-type']).not.to.eql('text/javascript; charset=UTF-8');
     expect(response.text).to.eql('');
   });
+
+  it('recognizes pages without `.html` extension', function * () {
+    const response = yield app.get('/some/page');
+
+    expect(response.status).to.eql(200);
+    expect(response.headers['content-type']).to.eql('text/html; charset=UTF-8');
+    expect(response.text).to.eql('some page\n');
+  });
+
+  it('recognizes pages without `.html` and with a slash', function * () {
+    const response = yield app.get('/some/page/');
+
+    expect(response.status).to.eql(200);
+    expect(response.headers['content-type']).to.eql('text/html; charset=UTF-8');
+    expect(response.text).to.eql('some page\n');
+  });
 });

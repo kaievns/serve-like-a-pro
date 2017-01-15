@@ -13,18 +13,7 @@ module.exports = function(config) {
   app.use(statics(config.root));
   app.use(favicon(config.favicon));
 
-  app.use((req, res) => {
-    const isHtmlRequest = !/.+?\.[a-z]+$/.test(req.url);
-
-    if (isHtmlRequest) {
-      res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
-      res.write(fs.readFileSync(config.fallback));
-    } else {
-      res.writeHead(404);
-    }
-
-    res.end();
-  })
+  app.use(terminal_fallback(config));
 
   return app;
 }
@@ -36,10 +25,21 @@ function assets_compression() {
   });
 }
 
-// app.use(production_caching());
-// app.use(assets_compression());
-// app.use(serve_cached_data());
-//
+function terminal_fallback(config) {
+  return (req, res) => {
+    const isHtmlRequest = !/.+?\.[a-z]+$/.test(req.url);
+
+    if (isHtmlRequest) {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=UTF-8' });
+      res.write(fs.readFileSync(config.fallback));
+    } else {
+      res.writeHead(404);
+    }
+
+    res.end();
+  }
+}
+
 // /////////////////////////////////////////////////////////
 // // private, middleware and stuff
 //
@@ -79,29 +79,4 @@ function assets_compression() {
 //       next();
 //     }
 //   }
-// }
-//
-// // reads cached data
-// function read_cacheable_data() {
-//   var fs           = require("fs");
-//   var data         = fs.readFileSync("./atom.xml");
-//   var html         = fs.readFileSync("./index.html");
-//   var scripts      = fs.readFileSync("./application.js");
-//   var styles       = fs.readFileSync("./application.css");
-//   var scripts_path = '/application-'+ get_sha(scripts) +'.js';
-//   var styles_path  = '/application-'+ get_sha(styles) +'.css';
-//
-//   return {
-//     data:    data.toString(),
-//     html:    html.toString().replace('/application.js', scripts_path).replace('/application.css', styles_path),
-//     styles:  styles.toString().replace("\n/*# sourceMappingURL=application.css.map */", ""),
-//     scripts: scripts.toString().replace("\n//# sourceMappingURL=application.js.map", "")
-//   };
-// }
-//
-// // builds an url-safe sha of a stream data
-// function get_sha(stream) {
-//   var crypto = require("crypto");
-//   var sha    = crypto.createHash("sha1").update(stream);
-//   return sha.digest("base64").replace(/[^a-z0-9]+/g, "").substr(0,6);
 // }

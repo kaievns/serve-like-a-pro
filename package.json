@@ -1,0 +1,19 @@
+{
+  "name": "serve-like-a-pro",
+  "version": "1.0.0",
+  "description": "A minimalistic production ready server for static sites",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MadRabbit/serve-like-a-pro.git"
+  },
+  "author": "Nikolay Nemshilov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MadRabbit/serve-like-a-pro/issues"
+  },
+  "homepage": "https://github.com/MadRabbit/serve-like-a-pro#readme"
+}

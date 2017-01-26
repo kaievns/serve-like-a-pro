@@ -4,11 +4,13 @@ const connect     = require("connect");
 const compression = require('compression');
 const favicon     = require('serve-favicon');
 const statics     = require('serve-static');
+const logger      = require('morgan');
 
 module.exports = function(config) {
   const app = connect();
 
   config.gzip && app.use(assets_compression());
+  config.log && app.use(logger('tiny'));
 
   app.use(extensionless_resolver(config));
 
